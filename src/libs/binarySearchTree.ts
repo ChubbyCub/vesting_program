@@ -23,7 +23,7 @@ export const insert = (root: TreeNode | null, node: TreeNode): TreeNode => {
 /**
  *  
  */
-// export const updateCumulativeShares = (root: TreeNode | null, node: TreeNode): TreeNode | null => {
+// export const updateCumulativeShares = (root: TreeNode | null): TreeNode | null => {
 //   if (root === null) return null;
 // }
 
@@ -107,16 +107,25 @@ export const findMaxInLeftSubtree = (node: TreeNode | null): TreeNode | null => 
  * @param label The date key to look up in the binary search tree.
  * @returns If the date label exists in the tree, returns the TreeNode with that label, else returns null.
  */
-export const findNode = (root: TreeNode | null, label: Date): TreeNode | null => {
+export const findClosestNode = (root: TreeNode | null, label: Date): TreeNode | null => {
   if (root === null) return null;
 
-  if (root.label < label) {
-    return findNode(root.right, label);
+  let closestDate = root.label;
+  let closestNode = root;
+
+  while (root !== null) {
+    if (Math.abs(root.label.getTime() - label.getTime()) < Math.abs(closestDate.getTime() - label.getTime())) {
+      closestDate = root.label;
+      closestNode = root;
+    }
+    if (root.label < label) {
+      root = root.right;
+    } else {
+      root = root.left;
+    }
   }
-  if (root.label > label) {
-    return findNode(root.left, label); 
-  }
-  return root;
+
+  return closestNode;
 }
 
 
