@@ -1,6 +1,6 @@
 import csv from 'csv-parser';
 import fs from 'fs';
-import { insert } from './binarySearchTree';
+import { insert, updateCumulativeShares } from './binarySearchTree';
 import { AwardAction, TreeNode } from './model';
 
 const dictionary: Map<String, TreeNode> = new Map<String, TreeNode>();
@@ -34,6 +34,11 @@ export const parse = (fileName: string, callback: (dictionary: Map<String, TreeN
     }
   })
   .on('end', () => {
+    // after the dictionary had all the keys, update the whole map
+    // so the number of shares in each employee BST becomes accummulative sums
+    for (const treeRoot of dictionary.values()) {
+      updateCumulativeShares(treeRoot);
+    }
     console.log('on end: ', dictionary);
     callback(dictionary);
   });

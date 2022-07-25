@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findNode = exports.findMaxInLeftSubtree = exports.findMinInRightSubtree = exports.findPredecessor = exports.findSuccessor = exports.insert = void 0;
+exports.findClosestNode = exports.findMaxInLeftSubtree = exports.findMinInRightSubtree = exports.findPredecessor = exports.findSuccessor = exports.updateCumulativeShares = exports.insert = void 0;
 /**
  * @param root Starting node of the employee binary search tree.
  * @param node New tree node to be inserted into the binary search tree.
@@ -22,12 +22,19 @@ const insert = (root, node) => {
     return root;
 };
 exports.insert = insert;
+let prevNode = null;
 /**
  *
  */
-// export const updateCumulativeShares = (root: TreeNode | null, node: TreeNode): TreeNode | null => {
-//   if (root === null) return null;
-// }
+const updateCumulativeShares = (root) => {
+    if (root === null)
+        return;
+    (0, exports.updateCumulativeShares)(root.left);
+    root.numShares = prevNode === null ? root.numShares : root.numShares + prevNode.numShares;
+    prevNode = root;
+    (0, exports.updateCumulativeShares)(root.right);
+};
+exports.updateCumulativeShares = updateCumulativeShares;
 /**
  * Finds the inorder successor of a given node in a binary search tree.
  * @param root Starting node of the employee binary search tree.
@@ -102,15 +109,23 @@ exports.findMaxInLeftSubtree = findMaxInLeftSubtree;
  * @param label The date key to look up in the binary search tree.
  * @returns If the date label exists in the tree, returns the TreeNode with that label, else returns null.
  */
-const findNode = (root, label) => {
+const findClosestNode = (root, label) => {
     if (root === null)
         return null;
-    if (root.label < label) {
-        return (0, exports.findNode)(root.right, label);
+    let closestDate = root.label;
+    let closestNode = root;
+    while (root !== null) {
+        if (Math.abs(root.label.getTime() - label.getTime()) < Math.abs(closestDate.getTime() - label.getTime())) {
+            closestDate = root.label;
+            closestNode = root;
+        }
+        if (root.label < label) {
+            root = root.right;
+        }
+        else {
+            root = root.left;
+        }
     }
-    if (root.label > label) {
-        return (0, exports.findNode)(root.left, label);
-    }
-    return root;
+    return closestNode;
 };
-exports.findNode = findNode;
+exports.findClosestNode = findClosestNode;

@@ -37,6 +37,11 @@ const parse = (fileName, callback) => {
         }
     })
         .on('end', () => {
+        // after the dictionary had all the keys, update the whole map
+        // so the number of shares in each employee BST becomes accummulative sums
+        for (const treeRoot of dictionary.values()) {
+            (0, binarySearchTree_1.updateCumulativeShares)(treeRoot);
+        }
         console.log('on end: ', dictionary);
         callback(dictionary);
     });

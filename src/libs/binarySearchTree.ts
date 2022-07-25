@@ -20,12 +20,17 @@ export const insert = (root: TreeNode | null, node: TreeNode): TreeNode => {
   return root;
 }
 
+let prevNode: TreeNode | null = null;
 /**
  *  
  */
-// export const updateCumulativeShares = (root: TreeNode | null): TreeNode | null => {
-//   if (root === null) return null;
-// }
+export const updateCumulativeShares = (root: TreeNode | null): void => {
+  if (root === null) return;
+  updateCumulativeShares(root.left);
+  root.numShares = prevNode === null ? root.numShares : root.numShares + prevNode.numShares;
+  prevNode = root;
+  updateCumulativeShares(root.right);
+}
 
 /**
  * Finds the inorder successor of a given node in a binary search tree.
