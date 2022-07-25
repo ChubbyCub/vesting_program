@@ -1,6 +1,6 @@
 import type { Arguments, CommandBuilder } from 'yargs';
+import BinarySearchTree from '../libs/binarySearchTree';
 import { parse } from '../libs/csvParser';
-import { TreeNode } from '../libs/model';
 
 type Options = {
   fileName: string;
@@ -17,7 +17,7 @@ export const builder: CommandBuilder<Options, Options> = (yargs) =>
 
 export const handler = (argv: Arguments<Options>) => {
   const { fileName, targetDate } = argv;
-  parse(fileName, (dictionary: Map<String, TreeNode>) => {
+  parse(fileName, (dictionary: Map<String, BinarySearchTree>) => {
     process.stdout.write(JSON.stringify(dictionary));
     process.exit(0);
   })

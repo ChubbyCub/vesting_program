@@ -1,9 +1,9 @@
 import csv from 'csv-parser';
 import fs from 'fs';
-import { insert, updateCumulativeShares } from './binarySearchTree';
+import BinarySearchTree from './binarySearchTree';
 import { AwardAction, TreeNode } from './model';
 
-const dictionary: Map<String, TreeNode> = new Map<String, TreeNode>();
+const dictionary: Map<String, BinarySearchTree> = new Map<String, BinarySearchTree>();
 
 /**
  * Parses the csv line by line and inserts each line into a binary search tree.
@@ -12,7 +12,7 @@ const dictionary: Map<String, TreeNode> = new Map<String, TreeNode>();
  * @param fileName 
  * @param callback 
  */
-export const parse = (fileName: string, callback: (dictionary: Map<String, TreeNode>) => void): void => {
+export const parse = (fileName: string, callback: (dictionary: Map<String, BinarySearchTree>) => void): void => {
   fs.createReadStream(`${fileName}`)
   .pipe(csv({ headers: false }))
   .on('data', (data) => {
@@ -24,20 +24,23 @@ export const parse = (fileName: string, callback: (dictionary: Map<String, TreeN
       left: null,
       right: null,
     };
+
+    const employeeBst: BinarySearchTree = new BinarySearchTree();
     
     if (dictionary.has(token)) {
-      const root = dictionary.get(token);
-      insert(root!, newNode);
+      const root = dictionary.get(token)?.getRoot();
+      employeeBst.insert(root!, newNode);
     } else {
-      const root = insert(null, newNode);
-      dictionary.set(token, root);
+      employeeBst.setRoot(newNode);
+      dictionary.set(token, employeeBst);
     }
   })
   .on('end', () => {
     // after the dictionary had all the keys, update the whole map
     // so the number of shares in each employee BST becomes accummulative sums
-    for (const treeRoot of dictionary.values()) {
-      updateCumulativeShares(treeRoot);
+    for (const bst of dictionary.values()) {
+      const treeRoot = bst.getRoot();
+      bst.updateCumulativeShares(treeRoot);
     }
     console.log('on end: ', dictionary);
     callback(dictionary);

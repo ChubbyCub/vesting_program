@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.parse = void 0;
 const csv_parser_1 = __importDefault(require("csv-parser"));
 const fs_1 = __importDefault(require("fs"));
-const binarySearchTree_1 = require("./binarySearchTree");
+const binarySearchTree_1 = __importDefault(require("./binarySearchTree"));
 const model_1 = require("./model");
 const dictionary = new Map();
 /**
@@ -27,20 +27,22 @@ const parse = (fileName, callback) => {
             left: null,
             right: null,
         };
+        const employeeBst = new binarySearchTree_1.default();
         if (dictionary.has(token)) {
-            const root = dictionary.get(token);
-            (0, binarySearchTree_1.insert)(root, newNode);
+            const root = dictionary.get(token)?.getRoot();
+            employeeBst.insert(root, newNode);
         }
         else {
-            const root = (0, binarySearchTree_1.insert)(null, newNode);
-            dictionary.set(token, root);
+            employeeBst.setRoot(newNode);
+            dictionary.set(token, employeeBst);
         }
     })
         .on('end', () => {
         // after the dictionary had all the keys, update the whole map
         // so the number of shares in each employee BST becomes accummulative sums
-        for (const treeRoot of dictionary.values()) {
-            (0, binarySearchTree_1.updateCumulativeShares)(treeRoot);
+        for (const bst of dictionary.values()) {
+            const treeRoot = bst.getRoot();
+            bst.updateCumulativeShares(treeRoot);
         }
         console.log('on end: ', dictionary);
         callback(dictionary);

@@ -1,16 +1,24 @@
-import { findClosestNode, insert, updateCumulativeShares } from "../libs/binarySearchTree";
+import BinarySearchTree from "../libs/binarySearchTree";
 import { TreeNode } from "../libs/model";
 
 describe('BinarySearchTree operation', () => {
+  let bst: BinarySearchTree;
+  
+  beforeEach(() => {
+    bst = new BinarySearchTree();
+
+    const root: TreeNode = {
+      label: new Date('2022-07-24'),
+      numShares: 1000,
+      left: null,
+      right: null,
+    }
+
+    bst.setRoot(root);
+  })
+
   describe('inserts', () => {
     it('inserts a new tree node in the correct position', () => {
-      const root: TreeNode = {
-        label: new Date('2022-07-24'),
-        numShares: 1000,
-        left: null,
-        right: null,
-      }
-  
       const node_one: TreeNode = {
         label: new Date('2022-06-30'),
         numShares: 200,
@@ -24,18 +32,20 @@ describe('BinarySearchTree operation', () => {
         left: null,
         right: null,
       }
-  
-      const expectedTree: TreeNode = {
+      
+      const root = bst.getRoot();
+
+      const expectedRoot: TreeNode = {
         label: new Date('2022-07-24'),
         numShares: 1000,
         left: node_one,
         right: node_two,
       }
+      
+      bst.insert(root, node_one);
+      bst.insert(root, node_two);
   
-      insert(root, node_one);
-      insert(root, node_two);
-  
-      expect(root).toStrictEqual(expectedTree);
+      expect(root).toStrictEqual(expectedRoot);
     });
   
     it('adds shares to an existing node record when there is a duplicate row', () => {
@@ -60,14 +70,7 @@ describe('BinarySearchTree operation', () => {
         right: null,
       }
   
-      const root: TreeNode = {
-        label: new Date('2022-07-24'),
-        numShares: 1000,
-        left: null,
-        right: null,
-      }
-  
-      const expectedTree: TreeNode = {
+      const expectedRoot: TreeNode = {
         label: new Date('2022-07-24'),
         numShares: 1000,
         left: node_one,
@@ -78,12 +81,13 @@ describe('BinarySearchTree operation', () => {
           right: null,
         },
       }
-  
-      insert(root, node_one);
-      insert(root, node_two);
-      insert(root, duplicate_node_two);
       
-      expect(root).toStrictEqual(expectedTree);
+      const root = bst.getRoot();
+      bst.insert(root, node_one);
+      bst.insert(root, node_two);
+      bst.insert(root, duplicate_node_two);
+      
+      expect(root).toStrictEqual(expectedRoot);
     });
   })
   
@@ -117,20 +121,17 @@ describe('BinarySearchTree operation', () => {
         right: null,
       }
   
-      const root: TreeNode = {
-        label: new Date('2022-07-24'),
-        numShares: 1000,
-        left: node_one,
-        right: node_two,
-      }
+      const root = bst.getRoot();
+      bst.insert(root, node_one);
+      bst.insert(root, node_two);
       // date is not part of the tree greater than the greatest label
-      const result_one = findClosestNode(root, new Date('2022-09-01'));
+      const result_one = bst.findClosestNode(root, new Date('2022-09-01'));
       // date is part of the tree
-      const result_two = findClosestNode(root, new Date('2022-07-03'));
+      const result_two = bst.findClosestNode(root, new Date('2022-07-03'));
       // date is not part of the tree less than the smallest label
-      const result_three = findClosestNode(root, new Date('2022-04-01'));
+      const result_three = bst.findClosestNode(root, new Date('2022-04-01'));
       // date is between two dates that are part of the tree
-      const result_four = findClosestNode(root, new Date('2022-07-15'));
+      const result_four = bst.findClosestNode(root, new Date('2022-07-15'));
       expect(result_one).toStrictEqual(node_two);
       expect(result_two).toStrictEqual(node_three);
       expect(result_three).toStrictEqual(node_four);
@@ -168,15 +169,12 @@ describe('BinarySearchTree operation', () => {
         right: null,
       }
   
-      const root: TreeNode = {
-        label: new Date('2022-07-24'),
-        numShares: 1000,
-        left: node_one,
-        right: node_two,
-      }
+      const root = bst.getRoot();
+      bst.insert(root, node_one);
+      bst.insert(root, node_two);
   
-      updateCumulativeShares(root);
-      expect(root.numShares).toEqual(1800);
+      bst.updateCumulativeShares(root);
+      expect(root!.numShares).toEqual(1800);
       expect(node_one.numShares).toEqual(700);
       expect(node_two.numShares).toEqual(1820);
       expect(node_three.numShares).toEqual(800);
