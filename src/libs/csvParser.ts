@@ -20,7 +20,7 @@ export const parse = (fileName: string, callback: (dictionary: Map<String, TreeN
     
     const newNode: TreeNode = {
       label: new Date(data["4"]),
-      numShares: data["0"] === AwardAction.VEST ? data["5"] : -data["5"],
+      numShares: data["0"] === AwardAction.VEST ? parseInt(data["5"]) : -parseInt(data["5"]),
       left: null,
       right: null,
     };

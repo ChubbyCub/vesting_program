@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findClosestNode = exports.findMaxInLeftSubtree = exports.findMinInRightSubtree = exports.findPredecessor = exports.findSuccessor = exports.updateCumulativeShares = exports.insert = void 0;
+exports.findClosestNode = exports.updateCumulativeShares = exports.insert = void 0;
 /**
  * @param root Starting node of the employee binary search tree.
  * @param node New tree node to be inserted into the binary search tree.
@@ -22,9 +22,11 @@ const insert = (root, node) => {
     return root;
 };
 exports.insert = insert;
+// variable to keep track of the previous node to accummulate the sum
 let prevNode = null;
 /**
- *
+ * Traverses the binary search tree and update each key date
+ * with cummulated shares awarded to employee by each key date.
  */
 const updateCumulativeShares = (root) => {
     if (root === null)
@@ -35,74 +37,6 @@ const updateCumulativeShares = (root) => {
     (0, exports.updateCumulativeShares)(root.right);
 };
 exports.updateCumulativeShares = updateCumulativeShares;
-/**
- * Finds the inorder successor of a given node in a binary search tree.
- * @param root Starting node of the employee binary search tree.
- * @param node The node that we need to find the successor of.
- * @returns The successor node of the input node.
- */
-const findSuccessor = (root, node) => {
-    if (root === null)
-        return null;
-    if (node.right !== null) {
-        return (0, exports.findMinInRightSubtree)(node.right);
-    }
-    let prev = null;
-    while (root !== null && root.label !== node.label) {
-        if (root.label <= node.label) {
-            root = root.right;
-        }
-        else {
-            prev = root;
-            root = root.left;
-        }
-    }
-    return prev;
-};
-exports.findSuccessor = findSuccessor;
-/**
- * Finds the inorder predecessor of a given node in a binary search tree.
- * @param root Starting node of the employee binary search tree.
- * @param node The node that we need to find the predecessor of.
- * @returns The predecessor node of the input node.
- */
-const findPredecessor = (root, node) => {
-    if (root === null)
-        return null;
-    if (node.left !== null) {
-        return (0, exports.findMaxInLeftSubtree)(node.left);
-    }
-    let prev = null;
-    while (root !== null && root.label !== node.label) {
-        if (root.label <= node.label) {
-            prev = root;
-            root = root.right;
-        }
-        else {
-            root = root.left;
-        }
-    }
-    return prev;
-};
-exports.findPredecessor = findPredecessor;
-const findMinInRightSubtree = (node) => {
-    if (node === null)
-        return null;
-    while (node.left !== null) {
-        node = node.left;
-    }
-    return node;
-};
-exports.findMinInRightSubtree = findMinInRightSubtree;
-const findMaxInLeftSubtree = (node) => {
-    if (node === null)
-        return null;
-    while (node.right !== null) {
-        node = node.right;
-    }
-    return node;
-};
-exports.findMaxInLeftSubtree = findMaxInLeftSubtree;
 /**
  * Searches for a tree node given a date label.
  * @param root Starting node of the employee binary search tree.

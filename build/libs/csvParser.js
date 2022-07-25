@@ -23,7 +23,7 @@ const parse = (fileName, callback) => {
         const token = data["1"] + data["2"] + data["3"];
         const newNode = {
             label: new Date(data["4"]),
-            numShares: data["0"] === model_1.AwardAction.VEST ? data["5"] : -data["5"],
+            numShares: data["0"] === model_1.AwardAction.VEST ? parseInt(data["5"]) : -parseInt(data["5"]),
             left: null,
             right: null,
         };

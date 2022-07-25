@@ -20,9 +20,11 @@ export const insert = (root: TreeNode | null, node: TreeNode): TreeNode => {
   return root;
 }
 
+// variable to keep track of the previous node to accummulate the sum
 let prevNode: TreeNode | null = null;
 /**
- *  
+ * Traverses the binary search tree and update each key date
+ * with cummulated shares awarded to employee by each key date.
  */
 export const updateCumulativeShares = (root: TreeNode | null): void => {
   if (root === null) return;
