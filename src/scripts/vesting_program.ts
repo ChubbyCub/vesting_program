@@ -1,12 +1,8 @@
 import type { Arguments, CommandBuilder } from 'yargs';
 import BinarySearchTree from '../libs/binarySearchTree';
 import { parse } from '../libs/csvParser';
-import { SortAttribute } from '../libs/model';
+import { Options, SortAttribute } from '../libs/model';
 
-type Options = {
-  fileName: string;
-  targetDate: string;
-};
 
 export const command: string = '$0 <fileName> <targetDate>';
 export const desc: string = 'Processing vesting schedule with vesting_program';

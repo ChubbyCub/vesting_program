@@ -29,3 +29,8 @@ export enum SortAttribute {
   EMPLOYEE_ID = 0,
   AWARD_ID = 2,
 }
+
+export type Options = {
+  fileName: string;
+  targetDate: string;
+};
