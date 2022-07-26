@@ -8,7 +8,6 @@ const csv_parser_1 = __importDefault(require("csv-parser"));
 const fs_1 = __importDefault(require("fs"));
 const binarySearchTree_1 = __importDefault(require("./binarySearchTree"));
 const model_1 = require("./model");
-const dictionary = new Map();
 /**
  * Parses the csv line by line and inserts each line into a binary search tree.
  * At the same time, indexing the information about the employeeId, employeeName and awardId
@@ -17,10 +16,11 @@ const dictionary = new Map();
  * @param callback
  */
 const parse = (fileName, callback) => {
+    const dictionary = new Map();
     fs_1.default.createReadStream(`${fileName}`)
         .pipe((0, csv_parser_1.default)({ headers: false }))
         .on('data', (data) => {
-        const token = data["1"] + data["2"] + data["3"];
+        const token = data["1"] + "," + data["2"] + "," + data["3"];
         const newNode = {
             label: new Date(data["4"]),
             numShares: data["0"] === model_1.AwardAction.VEST ? parseInt(data["5"]) : -parseInt(data["5"]),

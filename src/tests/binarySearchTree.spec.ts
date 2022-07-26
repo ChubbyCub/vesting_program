@@ -134,8 +134,8 @@ describe('BinarySearchTree operation', () => {
       const result_four = bst.findClosestNode(root, new Date('2022-07-15'));
       expect(result_one).toStrictEqual(node_two);
       expect(result_two).toStrictEqual(node_three);
-      expect(result_three).toStrictEqual(node_four);
-      expect(result_four).toStrictEqual(root);
+      expect(result_three).toBeNull();
+      expect(result_four).toStrictEqual(node_three);
     });
   });
 

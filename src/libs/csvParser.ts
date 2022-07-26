@@ -3,8 +3,6 @@ import fs from 'fs';
 import BinarySearchTree from './binarySearchTree';
 import { AwardAction, TreeNode } from './model';
 
-const dictionary: Map<String, BinarySearchTree> = new Map<String, BinarySearchTree>();
-
 /**
  * Parses the csv line by line and inserts each line into a binary search tree.
  * At the same time, indexing the information about the employeeId, employeeName and awardId
@@ -13,10 +11,12 @@ const dictionary: Map<String, BinarySearchTree> = new Map<String, BinarySearchTr
  * @param callback 
  */
 export const parse = (fileName: string, callback: (dictionary: Map<String, BinarySearchTree>) => void): void => {
+  const dictionary: Map<String, BinarySearchTree> = new Map<String, BinarySearchTree>();
+  
   fs.createReadStream(`${fileName}`)
   .pipe(csv({ headers: false }))
   .on('data', (data) => {
-    const token: string = data["1"] + data["2"] + data["3"];
+    const token: string = data["1"] + "," + data["2"] + "," + data["3"];
     
     const newNode: TreeNode = {
       label: new Date(data["4"]),

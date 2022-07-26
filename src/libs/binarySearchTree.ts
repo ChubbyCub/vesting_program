@@ -66,12 +66,12 @@ export default class BinarySearchTree {
   public findClosestNode = (root: TreeNode | null, label: Date): TreeNode | null => {
     if (root === null) return null;
 
-    let closestDate = root.label;
-    let closestNode = root;
+    let smallestTime = 0;
+    let closestNode = null;
 
     while (root !== null) {
-      if (Math.abs(root.label.getTime() - label.getTime()) < Math.abs(closestDate.getTime() - label.getTime())) {
-        closestDate = root.label;
+      if (root.label.getTime() > smallestTime && root.label.getTime() <= label.getTime()) {
+        smallestTime = root.label.getTime();
         closestNode = root;
       }
       if (root.label < label) {

@@ -18,7 +18,26 @@ export const builder: CommandBuilder<Options, Options> = (yargs) =>
 export const handler = (argv: Arguments<Options>) => {
   const { fileName, targetDate } = argv;
   parse(fileName, (dictionary: Map<String, BinarySearchTree>) => {
-    process.stdout.write(JSON.stringify(dictionary));
+    let result: string[] = [];
+    for(let [key, bst] of dictionary) {
+      const root = bst.getRoot();
+      const closestNode = bst.findClosestNode(root, new Date(targetDate));
+      
+      if (closestNode) {
+        result.push(key + "," + closestNode.numShares.toString());
+      } else {
+        result.push(key + "," + "0");
+      }
+    }
+    result.sort((a: string, b: string) => {
+      const arrayOne = a.split(",");
+      const arrayTwo = b.split(",");
+      if (arrayOne[0] === arrayTwo[0]) {
+        return arrayOne[2].localeCompare(arrayTwo[2]);
+      }
+      return arrayOne[0].localeCompare(arrayTwo[0]);
+    })
+    process.stdout.write(JSON.stringify(result));
     process.exit(0);
   })
 };
