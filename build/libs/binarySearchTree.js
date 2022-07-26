@@ -3,7 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class BinarySearchTree {
     constructor() {
         /**
-         * @param root Starting node of the employee binary search tree.
+         * Inserts a new tree node to the binary search tree.
+         * @param root Referene to the starting node of the employee binary search tree.
          * @param node New tree node to be inserted into the binary search tree.
          * @returns Root of the updated binary search tree with the new node included.
          */
@@ -23,8 +24,10 @@ class BinarySearchTree {
             return root;
         };
         /**
-         * Traverses the binary search tree and update each key date
-         * with cummulated shares awarded to employee by each key date.
+         * Traverses the binary search tree and update each node
+         * with cummulated shares awarded to employee by the node date label.
+         * @param root Referene to the starting node of the employee binary search tree.
+         * @returns void
          */
         this.updateCumulativeShares = (root) => {
             if (root === null)
@@ -36,9 +39,10 @@ class BinarySearchTree {
         };
         /**
          * Searches for a tree node given a date label.
-         * @param root Starting node of the employee binary search tree.
+         * @param root Reference to the starting node of the employee binary search tree.
          * @param label The date key to look up in the binary search tree.
-         * @returns If the date label exists in the tree, returns the TreeNode with that label, else returns null.
+         * @returns TreeNode if there exists a tree node with date label smaller or equal to the
+         * search key.
          */
         this.findClosestNode = (root, label) => {
             if (root === null)

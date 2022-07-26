@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handler = exports.builder = exports.desc = exports.command = void 0;
 const csvParser_1 = require("../libs/csvParser");
+const model_1 = require("../libs/model");
 exports.command = '$0 <fileName> <targetDate>';
 exports.desc = 'Processing vesting schedule with vesting_program';
 const builder = (yargs) => yargs
@@ -22,15 +23,16 @@ const handler = (argv) => {
                 result.push(key + "," + "0");
             }
         }
+        // sort the result by employee Id and award Id
         result.sort((a, b) => {
             const arrayOne = a.split(",");
             const arrayTwo = b.split(",");
-            if (arrayOne[0] === arrayTwo[0]) {
-                return arrayOne[2].localeCompare(arrayTwo[2]);
-            }
-            return arrayOne[0].localeCompare(arrayTwo[0]);
+            return arrayOne[model_1.SortAttribute.EMPLOYEE_ID].localeCompare(arrayTwo[model_1.SortAttribute.EMPLOYEE_ID])
+                || arrayOne[model_1.SortAttribute.AWARD_ID].localeCompare(arrayTwo[model_1.SortAttribute.AWARD_ID]);
         });
-        process.stdout.write(JSON.stringify(result));
+        result.forEach(item => {
+            process.stdout.write(item + '\n');
+        });
         process.exit(0);
     });
 };

@@ -1,6 +1,7 @@
 import type { Arguments, CommandBuilder } from 'yargs';
 import BinarySearchTree from '../libs/binarySearchTree';
 import { parse } from '../libs/csvParser';
+import { SortAttribute } from '../libs/model';
 
 type Options = {
   fileName: string;
@@ -19,6 +20,7 @@ export const handler = (argv: Arguments<Options>) => {
   const { fileName, targetDate } = argv;
   parse(fileName, (dictionary: Map<String, BinarySearchTree>) => {
     let result: string[] = [];
+
     for(let [key, bst] of dictionary) {
       const root = bst.getRoot();
       const closestNode = bst.findClosestNode(root, new Date(targetDate));
@@ -29,15 +31,19 @@ export const handler = (argv: Arguments<Options>) => {
         result.push(key + "," + "0");
       }
     }
+    // sort the result by employee Id and award Id
     result.sort((a: string, b: string) => {
       const arrayOne = a.split(",");
       const arrayTwo = b.split(",");
-      if (arrayOne[0] === arrayTwo[0]) {
-        return arrayOne[2].localeCompare(arrayTwo[2]);
-      }
-      return arrayOne[0].localeCompare(arrayTwo[0]);
-    })
-    process.stdout.write(JSON.stringify(result));
+      
+      return arrayOne[SortAttribute.EMPLOYEE_ID].localeCompare(arrayTwo[SortAttribute.EMPLOYEE_ID]) 
+        || arrayOne[SortAttribute.AWARD_ID].localeCompare(arrayTwo[SortAttribute.AWARD_ID]);
+    });
+
+    result.forEach(item => {
+      process.stdout.write(item + '\n');
+    });
+    
     process.exit(0);
   })
 };
