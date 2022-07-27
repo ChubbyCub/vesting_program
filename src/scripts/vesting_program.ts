@@ -1,5 +1,5 @@
 import type { Arguments, CommandBuilder } from 'yargs';
-import BinarySearchTree from '../libs/binarySearchTree';
+import ShareTracker from '../libs/shareTracker';
 import { parse } from '../libs/csvParser';
 import { Options, SortAttribute } from '../libs/model';
 
@@ -14,7 +14,7 @@ export const builder: CommandBuilder<Options, Options> = (yargs) =>
 
 export const handler = (argv: Arguments<Options>) => {
   const { fileName, targetDate } = argv;
-  parse(fileName, (dictionary: Map<String, BinarySearchTree>) => {
+  parse(fileName, (dictionary: Map<String, ShareTracker>) => {
     let result: string[] = [];
 
     for(let [key, bst] of dictionary) {

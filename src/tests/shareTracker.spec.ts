@@ -1,11 +1,11 @@
-import BinarySearchTree from "../libs/binarySearchTree";
+import ShareTracker from "../libs/shareTracker";
 import { TreeNode } from "../libs/model";
 
 describe('BinarySearchTree operation', () => {
-  let bst: BinarySearchTree;
+  let bst: ShareTracker;
   
   beforeEach(() => {
-    bst = new BinarySearchTree();
+    bst = new ShareTracker();
 
     const root: TreeNode = {
       label: new Date('2022-07-24'),

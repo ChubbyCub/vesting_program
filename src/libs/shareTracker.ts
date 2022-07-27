@@ -1,6 +1,6 @@
 import { TreeNode } from "./model"
 
-export default class BinarySearchTree {
+export default class ShareTracker {
   private root: TreeNode | null;
   private prevNode: TreeNode | null;
 

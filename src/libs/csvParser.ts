@@ -1,6 +1,6 @@
 import csv from 'csv-parser';
 import fs from 'fs';
-import BinarySearchTree from './binarySearchTree';
+import ShareTracker from './shareTracker';
 import { AwardAction, CsvHeaders, TreeNode } from './model';
 
 /**
@@ -11,8 +11,8 @@ import { AwardAction, CsvHeaders, TreeNode } from './model';
  * @param callback allows the function to async returns the result dictionary after it completes
  * parsing.
  */
-export const parse = (fileName: string, callback: (dictionary: Map<String, BinarySearchTree>) => void): void => {
-  const dictionary: Map<String, BinarySearchTree> = new Map<String, BinarySearchTree>();
+export const parse = (fileName: string, callback: (dictionary: Map<String, ShareTracker>) => void): void => {
+  const dictionary: Map<String, ShareTracker> = new Map<String, ShareTracker>();
   
   fs.createReadStream(`${fileName}`)
   .pipe(csv({ headers: false }))
@@ -48,8 +48,8 @@ const createDictionaryToken = (data: any) => {
     + data[CsvHeaders.EMPLOYEE_NAME] + "," + data[CsvHeaders.AWARD_ID];
 }
 
-const buildDictionary = (dictionary: Map<String, BinarySearchTree>, token: string, newNode: TreeNode): Map<String, BinarySearchTree> => {
-  const employeeBst: BinarySearchTree = new BinarySearchTree();
+const buildDictionary = (dictionary: Map<String, ShareTracker>, token: string, newNode: TreeNode): Map<String, ShareTracker> => {
+  const employeeBst: ShareTracker = new ShareTracker();
     
   if (dictionary.has(token)) {
     const root = dictionary.get(token)?.getRoot();
