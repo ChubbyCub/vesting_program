@@ -13,11 +13,10 @@ const handler = (argv) => {
     const { fileName, targetDate } = argv;
     (0, csvParser_1.parse)(fileName, (dictionary) => {
         let result = [];
-        for (let [key, bst] of dictionary) {
-            const root = bst.getRoot();
-            const closestNode = bst.findClosestNode(root, new Date(targetDate));
-            if (closestNode) {
-                result.push(key + "," + closestNode.numShares.toString());
+        for (let [key, vestingSchedule] of dictionary) {
+            const closestShareTracker = vestingSchedule.findClosestShareTrackerToDate(new Date(targetDate));
+            if (closestShareTracker) {
+                result.push(key + "," + closestShareTracker.cumulativeNumShares.toString());
             }
             else {
                 result.push(key + "," + "0");

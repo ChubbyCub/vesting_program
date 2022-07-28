@@ -1,7 +1,7 @@
 import type { Arguments, CommandBuilder } from 'yargs';
-import ShareTracker from '../libs/shareTracker';
 import { parse } from '../libs/csvParser';
 import { Options, SortAttribute } from '../libs/model';
+import VestingSchedule from '../libs/vestingSchedule';
 
 
 export const command: string = '$0 <fileName> <targetDate>';
@@ -14,15 +14,14 @@ export const builder: CommandBuilder<Options, Options> = (yargs) =>
 
 export const handler = (argv: Arguments<Options>) => {
   const { fileName, targetDate } = argv;
-  parse(fileName, (dictionary: Map<String, ShareTracker>) => {
+  parse(fileName, (dictionary: Map<String, VestingSchedule>) => {
     let result: string[] = [];
 
-    for(let [key, bst] of dictionary) {
-      const root = bst.getRoot();
-      const closestNode = bst.findClosestNode(root, new Date(targetDate));
+    for(let [key, vestingSchedule] of dictionary) {
+      const closestShareTracker = vestingSchedule.findClosestShareTrackerToDate(new Date(targetDate));
       
-      if (closestNode) {
-        result.push(key + "," + closestNode.numShares.toString());
+      if (closestShareTracker) {
+        result.push(key + "," + closestShareTracker.cumulativeNumShares.toString());
       } else {
         result.push(key + "," + "0");
       }

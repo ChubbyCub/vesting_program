@@ -11,12 +11,49 @@ export default class VestingSchedule {
     return this.shareTrackers;
   }
 
+  /**
+   * Inserts a new share tracker into the vesting schedule and calculates the cumulative shares
+   * at the same time.
+   * @param tracker The new share tracker to be inserted into the Vesting Schedule
+   * @returns updated vesting schedule
+   */
   public insert(tracker: ShareTracker): Array<ShareTracker> {
     let positionToInsert = this.findInsertPosition(tracker);
     if (positionToInsert === -1) positionToInsert = 0;
     this.shareTrackers.splice(positionToInsert, 0, tracker);
     this.calculateCumulativeShares(positionToInsert);
     return this.shareTrackers;
+  }
+
+  /**
+   * Finds a ShareTracker with date label on or immediately before a query date.
+   * @param date query.
+   */
+  public findClosestShareTrackerToDate(date: Date): ShareTracker | null {
+    if (date > this.shareTrackers[this.shareTrackers.length - 1].label) return this.shareTrackers[this.shareTrackers.length - 1];
+
+    let smallestTimeDiff = Number.MAX_VALUE;
+    let candidateTracker = null;
+    let start = 0;
+    let end = this.shareTrackers.length - 1;
+
+    while (start <= end) {
+      let mid = Math.floor((start + end) / 2);
+      const currTimeDiff = this.shareTrackers[mid].label.getTime() - date.getTime();
+      if (currTimeDiff === 0) {
+        return this.shareTrackers[mid];
+      } else if (currTimeDiff < 0) {
+        if (currTimeDiff < smallestTimeDiff) {
+          smallestTimeDiff = Math.abs(currTimeDiff);
+          candidateTracker = this.shareTrackers[mid];
+        }
+        start = mid + 1;
+      } else {
+        end = mid - 1;
+      }
+    }
+    
+    return candidateTracker;
   }
 
   private calculateCumulativeShares(insertPosition: number) {
@@ -42,7 +79,9 @@ export default class VestingSchedule {
 
     while (start <= end) {
       let middle = Math.floor((start + end) / 2);
+
       const currTimeDiff = this.shareTrackers[middle].label.getTime() - tracker.label.getTime();
+
       if (Math.abs(currTimeDiff) < smallestTimeDiff) {
         smallestTimeDiff = Math.abs(currTimeDiff);
         if (currTimeDiff < 0) {
