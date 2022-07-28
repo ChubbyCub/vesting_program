@@ -47,11 +47,13 @@ const dictionary: Map<String, VestingSchedule> {
 ##### Write operation
 1. Process the csv file line by line. As a new line is read, the following transactions are performed:
   a.  Create a new key (if not already exists) in the Dictionary. The key is a string concat of `employeeId,employeeName,awardId`
-  b.  In case the key exists, retrieve the vesting schedule for that employee and inserts into this vesting schedule. Otherwise, create a new vesting schedule and insert the first share tracker for that employee.
-2. Note that the `insert` transaction still maintains the list order. In particular, we performed a binary search to find the insert position on the existing vesting schedule, which takes O(logN) time, in which N is the number of share trackers currently on the list.
+  b.  In case the key exists, retrieve the vesting schedule for that employee and inserts another new share tracker into this vesting schedule. Otherwise, create a new vesting schedule and insert the first share tracker for that employee.
+2. Note that the `insert` transaction still maintains the list order. In particular, we performed a binary search to find the insert position on the existing vesting schedule, which takes O(logN) time, in which N is the number of share trackers currently on the list. The actual insertion method will take O(N) time and will modify the same list of trackers under the vesting schedule.
 3. Note that the cumulative shares are calculated at the insertion time to make the write operation more efficient because we are only updating the vesting schedule from the insertion point till the end, saving us some processing time.
 
 ##### Read operation
-
 1. When given a `target date` the program will do a simple binary search of the list of share trackers for each employee and returns the share tracker with the date label on or before the `target date`. This read operation takes O(logN) time.
 2. The problem requires the result output to be sorted by `employeeId` and `awardId`. This is achieved by the the custom sort function. The time complexity of this sort is positively correlated with the result output size.
+
+##### Alternative approach
+Another approach that I also implemented but then switched to the above implementation is building a BinarySearchTree to organize the share trackers. The BinarySearchTree will make the `insert` transaction even more efficient because there is no copying/pushing elements like `splicing` the array. However, the trade-off is the code is less readable because recursion is not very reader-friendly. After weighing all the pros and cons, I decided to go with the above implementation. 
