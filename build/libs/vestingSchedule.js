@@ -26,27 +26,29 @@ class VestingSchedule {
      * @param date query.
      */
     findClosestShareTrackerToDate(date) {
-        if (date > this.shareTrackers[this.shareTrackers.length - 1].label)
-            return this.shareTrackers[this.shareTrackers.length - 1];
+        const shareTrackersSize = this.shareTrackers.length;
+        if (date > this.shareTrackers[shareTrackersSize - 1].label) {
+            return this.shareTrackers[shareTrackersSize - 1];
+        }
         let smallestTimeDiff = Number.MAX_VALUE;
         let candidateTracker = null;
         let start = 0;
-        let end = this.shareTrackers.length - 1;
+        let end = shareTrackersSize - 1;
         while (start <= end) {
-            let mid = Math.floor((start + end) / 2);
-            const currTimeDiff = this.shareTrackers[mid].label.getTime() - date.getTime();
+            let middle = Math.floor((start + end) / 2);
+            const currTimeDiff = this.shareTrackers[middle].label.getTime() - date.getTime();
             if (currTimeDiff === 0) {
-                return this.shareTrackers[mid];
+                return this.shareTrackers[middle];
             }
             else if (currTimeDiff < 0) {
                 if (currTimeDiff < smallestTimeDiff) {
                     smallestTimeDiff = Math.abs(currTimeDiff);
-                    candidateTracker = this.shareTrackers[mid];
+                    candidateTracker = this.shareTrackers[middle];
                 }
-                start = mid + 1;
+                start = middle + 1;
             }
             else {
-                end = mid - 1;
+                end = middle - 1;
             }
         }
         return candidateTracker;
@@ -62,12 +64,15 @@ class VestingSchedule {
         }
     }
     findInsertPosition(tracker) {
-        if (this.shareTrackers.length === 0 || tracker.label < this.shareTrackers[0].label)
+        const shareTrackersSize = this.shareTrackers.length;
+        if (shareTrackersSize === 0 || tracker.label < this.shareTrackers[0].label) {
             return 0;
-        if (tracker.label > this.shareTrackers[this.shareTrackers.length - 1].label)
-            return this.shareTrackers.length;
+        }
+        if (tracker.label > this.shareTrackers[shareTrackersSize - 1].label) {
+            return shareTrackersSize;
+        }
         let start = 0;
-        let end = this.shareTrackers.length - 1;
+        let end = shareTrackersSize - 1;
         let candidatePosition = -1;
         let smallestTimeDiff = Number.MAX_VALUE;
         while (start <= end) {
@@ -82,7 +87,7 @@ class VestingSchedule {
                     candidatePosition = middle;
                 }
             }
-            if (this.shareTrackers[middle].label.getTime() < tracker.label.getTime()) {
+            if (this.shareTrackers[middle].label < tracker.label) {
                 start = middle + 1;
             }
             else {

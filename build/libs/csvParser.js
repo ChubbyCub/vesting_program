@@ -9,9 +9,7 @@ const fs_1 = __importDefault(require("fs"));
 const model_1 = require("./model");
 const vestingSchedule_1 = __importDefault(require("./vestingSchedule"));
 /**
- * Parses the csv line by line and inserts each line into a binary search tree.
- * At the same time, indexing the information about the employeeId, employeeName and awardId
- * in a dictionary to make look up more convenient
+ * Parses the csv line by line and stores the vesting information.
  * @param fileName name of the csv file to be parsed.
  * @param callback allows the function to async returns the result dictionary after it completes
  * parsing.
