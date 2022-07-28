@@ -26,22 +26,23 @@ class VestingSchedule {
      * @param date query.
      */
     findClosestShareTrackerToDate(date) {
-        if (date < this.shareTrackers[0].label)
-            return this.shareTrackers[0];
-        if (date > this.shareTrackers[0].label)
+        if (date > this.shareTrackers[this.shareTrackers.length - 1].label)
             return this.shareTrackers[this.shareTrackers.length - 1];
-        let smallestTimeDiff = 0;
+        let smallestTimeDiff = Number.MAX_VALUE;
         let candidateTracker = null;
         let start = 0;
         let end = this.shareTrackers.length - 1;
         while (start <= end) {
             let mid = Math.floor((start + end) / 2);
-            if (this.shareTrackers[mid].label === date) {
+            const currTimeDiff = this.shareTrackers[mid].label.getTime() - date.getTime();
+            if (currTimeDiff === 0) {
                 return this.shareTrackers[mid];
             }
-            else if (this.shareTrackers[mid].label < date) {
-                smallestTimeDiff = this.shareTrackers[mid].label.getTime() - date.getTime();
-                candidateTracker = this.shareTrackers[mid];
+            else if (currTimeDiff < 0) {
+                if (currTimeDiff < smallestTimeDiff) {
+                    smallestTimeDiff = Math.abs(currTimeDiff);
+                    candidateTracker = this.shareTrackers[mid];
+                }
                 start = mid + 1;
             }
             else {
