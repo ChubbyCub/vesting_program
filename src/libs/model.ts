@@ -11,6 +11,12 @@ export interface TreeNode {
   right: TreeNode | null;
 }
 
+export interface ShareTracker {
+  label: Date;
+  numShares: number;
+  cumulativeNumShares: number;
+}
+
 export enum AwardAction {
   VEST = 'VEST',
   CANCEL = 'CANCEL',
