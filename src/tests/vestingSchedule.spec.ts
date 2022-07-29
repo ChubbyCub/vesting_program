@@ -74,6 +74,38 @@ describe('Vesting Schedule', () => {
     expect(vestingSchedule.getShareTrackers()[6]).toStrictEqual({...shareTracker_five, cumulativeNumShares: 910});
   });
 
+  it('handles duplicate record insertion correctly', () => {
+    const shareTracker_one: ShareTracker = {
+      label: new Date('2022-07-30'),
+      numShares: 200,
+      cumulativeNumShares: 0,
+    };
+    const shareTracker_two: ShareTracker = {
+      label: new Date('2022-08-01'),
+      numShares: 100,
+      cumulativeNumShares: 0,
+    };
+    const shareTracker_three: ShareTracker = {
+      label: new Date('2022-08-01'),
+      numShares: 100,
+      cumulativeNumShares: 0,
+    };
+    const shareTracker_four: ShareTracker = {
+      label: new Date('2022-07-30'),
+      numShares: 200,
+      cumulativeNumShares: 0,
+    }
+
+    vestingSchedule.insert(shareTracker_one);
+    vestingSchedule.insert(shareTracker_two);
+    vestingSchedule.insert(shareTracker_three);
+    vestingSchedule.insert(shareTracker_four);
+
+    expect(vestingSchedule.getShareTrackers().length).toEqual(2);
+    expect(vestingSchedule.getShareTrackers()[0]).toStrictEqual({...shareTracker_one, cumulativeNumShares: 400});
+    expect(vestingSchedule.getShareTrackers()[1]).toStrictEqual( {...shareTracker_two, cumulativeNumShares: 600});
+  });
+
   it('finds the share tracker with label on or before a query date', () => {
     const shareTracker_one: ShareTracker = {
       label: new Date('2022-07-30'),

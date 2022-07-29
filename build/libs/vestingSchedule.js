@@ -17,9 +17,23 @@ class VestingSchedule {
         let positionToInsert = this.findInsertPosition(tracker);
         if (positionToInsert === -1)
             positionToInsert = 0;
-        this.shareTrackers.splice(positionToInsert, 0, tracker);
+        if (this.isDuplicateTracker(positionToInsert, tracker)) {
+            this.shareTrackers[positionToInsert].numShares += tracker.numShares;
+        }
+        else {
+            this.shareTrackers.splice(positionToInsert, 0, tracker);
+        }
         this.calculateCumulativeShares(positionToInsert);
         return this.shareTrackers;
+    }
+    isDuplicateTracker(positionToInsert, tracker) {
+        if (this.shareTrackers.length === 0 && positionToInsert === 0)
+            return false;
+        if (positionToInsert > this.shareTrackers.length - 1)
+            return false;
+        if (this.shareTrackers[positionToInsert].label === tracker.label)
+            return true;
+        return false;
     }
     /**
      * Finds a ShareTracker with date label on or immediately before a query date.
