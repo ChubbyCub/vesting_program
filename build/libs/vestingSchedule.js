@@ -31,7 +31,7 @@ class VestingSchedule {
             return false;
         if (positionToInsert > this.shareTrackers.length - 1)
             return false;
-        if (this.shareTrackers[positionToInsert].label === tracker.label)
+        if (this.shareTrackers[positionToInsert].label.getTime() === tracker.label.getTime())
             return true;
         return false;
     }
