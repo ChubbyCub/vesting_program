@@ -13,8 +13,7 @@ Follow the steps below to get the program running:
 
 #### Assumptions:
 1. As mentioned in the project intro, vesting events happen incrementally over a period of time. As a result, I assume that the `write` operation does not happen as frequently as the `read` operation. So it is ok to take a bit longer to write data to storage.
-2. There are no duplicate records in the csv file (i.e. no two exact same rows exist in the file). 
-3. In an actual implementation, the data in the csv file should be sanitized and stored in a database (i.e. Postgresql). We can use a query language to aggregate and filter data. I am not sure the machine running this program has a database instance installed, so the data are stored in memory for now.
+2. In an actual implementation, the data in the csv file should be sanitized and stored in a database (i.e. Postgresql). We can use a query language to aggregate and filter data. I am not sure the machine running this program has a database instance installed, so the data are stored in memory for now.
 
 
 #### Implementation:
