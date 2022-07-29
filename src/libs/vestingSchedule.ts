@@ -102,12 +102,12 @@ export default class VestingSchedule {
 
       const currTimeDiff = this.shareTrackers[middle].label.getTime() - tracker.label.getTime();
 
-      if (Math.abs(currTimeDiff) < smallestTimeDiff) {
+      if (Math.abs(currTimeDiff) <= smallestTimeDiff) {
         smallestTimeDiff = Math.abs(currTimeDiff);
         if (currTimeDiff < 0) {
           candidatePosition = middle + 1;
         }
-        if (currTimeDiff > 0) {
+        if (currTimeDiff >= 0) {
           candidatePosition = middle;
         }
       }
