@@ -30,7 +30,6 @@ class VestingSchedule {
         if (date > this.shareTrackers[shareTrackersSize - 1].label) {
             return this.shareTrackers[shareTrackersSize - 1];
         }
-        let smallestTimeDiff = Number.MAX_VALUE;
         let candidateTracker = null;
         let start = 0;
         let end = shareTrackersSize - 1;
@@ -41,10 +40,7 @@ class VestingSchedule {
                 return this.shareTrackers[middle];
             }
             else if (currTimeDiff < 0) {
-                if (currTimeDiff < smallestTimeDiff) {
-                    smallestTimeDiff = Math.abs(currTimeDiff);
-                    candidateTracker = this.shareTrackers[middle];
-                }
+                candidateTracker = this.shareTrackers[middle];
                 start = middle + 1;
             }
             else {

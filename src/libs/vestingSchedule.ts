@@ -36,7 +36,6 @@ export default class VestingSchedule {
       return this.shareTrackers[shareTrackersSize - 1];
     }
 
-    let smallestTimeDiff = Number.MAX_VALUE;
     let candidateTracker = null;
     let start = 0;
     let end = shareTrackersSize - 1;
@@ -49,10 +48,7 @@ export default class VestingSchedule {
       if (currTimeDiff === 0) {
         return this.shareTrackers[middle];
       } else if (currTimeDiff < 0) {
-        if (currTimeDiff < smallestTimeDiff) {
-          smallestTimeDiff = Math.abs(currTimeDiff);
-          candidateTracker = this.shareTrackers[middle];
-        }
+        candidateTracker = this.shareTrackers[middle];
         start = middle + 1;
       } else {
         end = middle - 1;
