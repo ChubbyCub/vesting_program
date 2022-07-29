@@ -109,16 +109,40 @@ describe('Vesting Schedule', () => {
       cumulativeNumShares: 0,
     }
 
+    const shareTracker_seven: ShareTracker = {
+      label: new Date('2022-09-30'),
+      numShares: 105,
+      cumulativeNumShares: 0,
+    }
+    const shareTracker_eight: ShareTracker = {
+      label: new Date('2022-09-30'),
+      numShares: 105,
+      cumulativeNumShares: 0,
+    }
+
+    const shareTracker_nine: ShareTracker = {
+      label: new Date('2022-08-10'),
+      numShares: 110,
+      cumulativeNumShares: 0,
+    }
+
+    const shareTracker_ten: ShareTracker = {
+      label: new Date('2022-08-10'),
+      numShares: 110,
+      cumulativeNumShares: 0,
+    }
     vestingSchedule.insert(shareTracker_one);
     vestingSchedule.insert(shareTracker_two);
     vestingSchedule.insert(shareTracker_three);
     vestingSchedule.insert(shareTracker_four);
     vestingSchedule.insert(shareTracker_five);
     vestingSchedule.insert(shareTracker_six);
+    vestingSchedule.insert(shareTracker_seven);
+    vestingSchedule.insert(shareTracker_eight);
+    vestingSchedule.insert(shareTracker_nine);
+    vestingSchedule.insert(shareTracker_ten);
 
-    expect(vestingSchedule.getShareTrackers().length).toEqual(3);
-    // expect(vestingSchedule.getShareTrackers()[0]).toStrictEqual({...shareTracker_one, cumulativeNumShares: 400});
-    // expect(vestingSchedule.getShareTrackers()[1]).toStrictEqual( {...shareTracker_two, cumulativeNumShares: 600});
+    expect(vestingSchedule.getShareTrackers().length).toEqual(5);
   });
 
   it('finds the share tracker with label on or before a query date', () => {
